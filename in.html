@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VERTEX OF Google</title>
+    <link rel="icon" href="img/Untitled_2_design-removebg-preview.png">
+
+    <style>
+        /* General styles */
+        * {
+            border-radius: 10px;
+        }
+        body {
+            overflow: hidden;
+            margin: 0;
+            background: radial-gradient(circle, rgb(59, 14, 104) 0%, rgba(26, 8, 78, 1) 100%);
+            position: relative;
+        }
+
+        /* Background glow effects */
+        .background-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .background-glow::before,
+        .background-glow::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 100%;
+            box-shadow: 0 0 50px 50px #1c084f;
+        }
+
+        .background-glow::before {
+            width: 600px;
+            height: 600px;
+            background-color: #1a084e;
+        }
+
+        .background-glow::after {
+            width: 400px;
+            height: 400px;
+            background-color: #2f1e5f;
+            animation: circle-size 0.8s linear infinite alternate;
+        }
+
+        @keyframes circle-size {
+            from {
+                width: 400px;
+                height: 400px;
+            }
+            to {
+                width: 450px;
+                height: 450px;
+            }
+        }
+
+        /* Shadow glow effects */
+        .background-glow-shadow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            border-radius: 100%;
+            z-index: -1;
+            box-shadow: 10px -55px 30px 15px #823ca6, 24px -10px 47px 10px #aab3d2,
+                -21px -25px 97px 10px #5acee3, 51px 5px 17px 10px #1b7d8f, 3px 2px 77px 10px #f30bf5;
+            animation: shadow-rotate 1.5s linear infinite;
+            transform-origin: center;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes shadow-rotate {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* Google search styles */
+        .gsc-results-wrapper-overlay {
+            width: 97%;
+            height: 100%;
+            overflow-y: scroll;
+            position: relative;
+        }
+
+        input.gsc-input {
+            width: 100%;
+            padding: 0px;
+            border: none;
+            margin: 0px;
+            height: auto;
+            border-radius: 50px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google logo link -->
+    <a href="https://smesere.github.io/VertexGoogle/">
+        <img src="img/1-removebg-preview.png" alt="Google Search">
+    </a>
+
+    <!-- Google Custom Search -->
+    <script async src="https://cse.google.com/cse.js?cx=f1181e40062434e37"></script>
+    <div class="gcse-search"></div>
+
+    <!-- Animated background -->
+    <div class="background-glow"></div>
+    <div class="background-glow-shadow"></div>
+
+    <script>
+        // Particle animation on load
+        window.onload = function() {
+            const resultsContainer = document.querySelector('.gsc-results-wrapper-overlay');
+            const canvas = document.createElement('canvas');
+            resultsContainer.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            const particles = [];
+            const colors = ['red', '#f57900', 'yellow', '#ce5c00', '#5c3566'];
+
+            function setCanvasSize() {
+                canvas.width = resultsContainer.clientWidth;
+                canvas.height = resultsContainer.clientHeight * 2;
+            }
+
+            function createParticles() {
+                for (let i = 0; i < 100; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        toX: Math.random() * 2 - 1,
+                        toY: Math.random() * 2 - 1,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        size: Math.random() * 10 + 5
+                    });
+                }
+            }
+
+            function updateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (const p of particles) {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+
+                    p.x += p.toX;
+                    p.y += p.toY;
+
+                    if (p.x > canvas.width) p.x = 0;
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.y > canvas.height) p.y = 0;
+                    if (p.y < 0) p.y = canvas.height;
+                }
+                requestAnimationFrame(updateParticles);
+            }
+
+            setCanvasSize();
+            createParticles();
+            updateParticles();
+            window.addEventListener('resize', setCanvasSize);
+        };
+    </script>
+</body>
+</html>
